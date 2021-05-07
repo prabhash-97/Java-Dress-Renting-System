@@ -98,10 +98,10 @@
                               <Component id="register" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jButton2" min="-2" pref="123" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="25" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -110,8 +110,8 @@
                                       </Group>
                                       <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="fname" min="-2" pref="118" max="-2" attributes="0"/>
-                                          <Component id="regid" min="-2" pref="118" max="-2" attributes="0"/>
+                                          <Component id="fname" pref="140" max="32767" attributes="0"/>
+                                          <Component id="regid" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -120,10 +120,10 @@
                                           <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="mob" min="-2" pref="118" max="-2" attributes="0"/>
-                                          <Component id="cusid" min="-2" pref="118" max="-2" attributes="0"/>
-                                          <Component id="jScrollPane1" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="jScrollPane1" alignment="0" pref="140" max="32767" attributes="0"/>
+                                          <Component id="mob" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="cusid" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
