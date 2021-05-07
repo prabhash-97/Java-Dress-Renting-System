@@ -422,9 +422,9 @@ private void DisplayTable(){
           psmt.executeUpdate();
           JOptionPane.showMessageDialog(null, "Successfully Inserted!!!!");
           DisplayTable();
-          dressId.setText("");
-            dressSize.setSelectedItem("");
-            dressType.setSelectedItem("");
+            dressId.setText("");
+            dressSize.setSelectedItem(0);
+            dressType.setSelectedItem(0);
             dressColor.setText("");
             buttonGroup1.clearSelection(); 
             
@@ -460,8 +460,8 @@ private void DisplayTable(){
           JOptionPane.showMessageDialog(null, "Successfully Deleted!!!!");
           DisplayTable();
           dressId.setText("");
-            dressSize.setSelectedItem("");
-            dressType.setSelectedItem("");
+            dressSize.setSelectedItem(0);
+            dressType.setSelectedItem(0);
             dressColor.setText("");
             buttonGroup1.clearSelection(); 
             
@@ -511,8 +511,8 @@ private void DisplayTable(){
             JOptionPane.showMessageDialog(null, "Successfully Updated!!!!");
             DisplayTable();
             dressId.setText("");
-            dressSize.setSelectedItem("");
-            dressType.setSelectedItem("");
+            dressSize.setSelectedItem(0);
+            dressType.setSelectedItem(0);
             dressColor.setText("");
             buttonGroup1.clearSelection(); 
             
@@ -531,8 +531,8 @@ private void DisplayTable(){
 
     private void buttonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonClearActionPerformed
         dressId.setText("");
-        dressSize.setSelectedItem("");
-        dressType.setSelectedItem("");
+        dressSize.setSelectedItem(0);
+        dressType.setSelectedItem(0);
         dressColor.setText("");
         buttonGroup1.clearSelection();
         dressSize.requestFocus();

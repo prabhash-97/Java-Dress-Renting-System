@@ -12,6 +12,7 @@ import cus.registartion.MENU;
 import java.awt.event.KeyEvent;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.logging.Level;
@@ -33,6 +34,7 @@ public class DressRentForm extends javax.swing.JFrame {
         tableload();
         fillcombo2();
         fillcombo();
+        autoID();
         jButton2.setEnabled(false);
         jButton3.setEnabled(false);
     }
@@ -76,11 +78,36 @@ public class DressRentForm extends javax.swing.JFrame {
         }
     }
     
+    public void autoID(){
     
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/db_dressrent","root","");
+            Statement s = conn.createStatement();
+            
+            ResultSet rs = s.executeQuery("select Max(DREdres_RID) from dress_rent");
+            rs.next();
+            rs.getString("Max(DREdres_RID)");
+            
+            if(rs.getString("Max(DREdres_RID)") == null){
+                DRErent_idbox.setText("R000001");
+            }
+            else{
+                long id = Long.parseLong(rs.getString("Max(DREdres_RID)").substring(2,rs.getString("Max(DREdres_RID)").length()));
+                id++;  
+                
+                DRErent_idbox.setText("R" + String.format("%06d", id));
+            }
+            
+            
+        } catch(Exception e){
+           JOptionPane.showMessageDialog(null , e);
+        }
+    }
 
     public void tableload(){
         try {
-            String sql = "SELECT DREdres_id AS Dress_Id,DREcus_id AS Cust_Id,DREcus_name AS Customer,DRE_fee AS Fee ,DRE_date AS Date,DREdue_date AS Due_date FROM dress_rent";
+            String sql = "SELECT DREdres_RID As Rent_Id, DREdres_id AS Dress_Id,DREcus_id AS Cust_Id,DREcus_name AS Customer,DRE_fee AS Fee ,DRE_date AS Date,DREdue_date AS Due_date FROM dress_rent";
             pst = conn.prepareStatement(sql);
             rs= pst.executeQuery();
             table1.setModel(DbUtils.resultSetToTableModel(rs));
@@ -130,6 +157,8 @@ public class DressRentForm extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         DREcus_idbox = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        DRErent_idbox = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         table1 = new javax.swing.JTable();
 
@@ -217,6 +246,12 @@ public class DressRentForm extends javax.swing.JFrame {
 
         jLabel7.setText("Due Date");
 
+        DREcus_namebox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DREcus_nameboxActionPerformed(evt);
+            }
+        });
+
         DRE_datecal.setDateFormatString("yyyy-M-dd");
 
         jDateChooser2.setDateFormatString("yyyy-mm-dd");
@@ -242,14 +277,16 @@ public class DressRentForm extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Delete");
+        jButton3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jButton3.setText("DELETE");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Update");
+        jButton2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jButton2.setText("UPDATE");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -266,28 +303,27 @@ public class DressRentForm extends javax.swing.JFrame {
             }
         });
 
+        jLabel9.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel9.setText("Rent Id:");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(insertbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(clearbtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(0, 32, Short.MAX_VALUE)
-                                .addComponent(jButton3)
-                                .addGap(65, 65, 65)
-                                .addComponent(jButton2)
-                                .addGap(43, 43, 43))))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(insertbtn, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(clearbtn1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(26, 26, 26))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -307,13 +343,21 @@ public class DressRentForm extends javax.swing.JFrame {
                             .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
                             .addComponent(DREdue_datecal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(DREdres_idbox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(DREcus_idbox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(DREcus_idbox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(DRErent_idbox, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(51, 51, 51))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(3, 3, 3)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(DRErent_idbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(DREdres_idbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -339,14 +383,18 @@ public class DressRentForm extends javax.swing.JFrame {
                     .addComponent(DREdue_datecal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(clearbtn1)
-                    .addComponent(insertbtn, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(insertbtn)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(2, 2, 2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2))
-                .addGap(314, 314, 314)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(clearbtn1)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)))
+                .addGap(312, 312, 312)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
@@ -391,6 +439,7 @@ public class DressRentForm extends javax.swing.JFrame {
        String cust_id = DREcus_idbox.getSelectedItem().toString();
        String cust_name= DREcus_namebox.getText();
        String fee = DRE_feebox.getText();
+       String Rent_id=DRErent_idbox.getText();
        
        SimpleDateFormat Date_Format = new SimpleDateFormat("yyyy-MM-dd");
        String date = Date_Format.format(DRE_datecal.getDate());
@@ -399,7 +448,7 @@ public class DressRentForm extends javax.swing.JFrame {
        String due = Date_Format1.format(DREdue_datecal.getDate());
        
         try {
-            String sql = "INSERT INTO dress_rent(DREdres_id,DREcus_id,DREcus_name,DRE_fee,DRE_date,DREdue_date)VALUES('"+dress_id+"','"+cust_id+"','"+cust_name+"','"+fee+"','"+date+"','"+due+"')";
+            String sql = "INSERT INTO dress_rent(DREdres_RID,DREdres_id,DREcus_id,DREcus_name,DRE_fee,DRE_date,DREdue_date)VALUES('"+Rent_id+"','"+dress_id+"','"+cust_id+"','"+cust_name+"','"+fee+"','"+date+"','"+due+"')";
             pst = conn.prepareStatement(sql);
             pst.execute();
             JOptionPane.showMessageDialog(null,"Inserted!");
@@ -412,8 +461,15 @@ public class DressRentForm extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
-        
-   tableload();
+            tableload();
+            autoID();
+                DREdres_idbox.setSelectedIndex(0);
+                DREcus_idbox.setSelectedIndex(0);
+                DREcus_namebox.setText("");
+                DRE_feebox.setText("");
+                //DRErent_idbox.setText("");
+                DREdres_idbox.requestFocus();
+                
     }//GEN-LAST:event_insertbtnActionPerformed
 
     private void table1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table1MouseClicked
@@ -422,16 +478,16 @@ public class DressRentForm extends javax.swing.JFrame {
         try {
           DefaultTableModel df = (DefaultTableModel)table1.getModel();
           int selectedIndex = table1.getSelectedRow();
-          
-          DREdres_idbox.setSelectedItem(df.getValueAt(selectedIndex, 0).toString());
-          DREcus_idbox.setSelectedItem(df.getValueAt(selectedIndex, 1).toString());
-          DREcus_namebox.setText(df.getValueAt(selectedIndex, 2).toString());
-          DRE_feebox.setText(df.getValueAt(selectedIndex, 3).toString());
+          DRErent_idbox.setText(df.getValueAt(selectedIndex, 0).toString());
+          DREdres_idbox.setSelectedItem(df.getValueAt(selectedIndex, 1).toString());
+          DREcus_idbox.setSelectedItem(df.getValueAt(selectedIndex, 2).toString());
+          DREcus_namebox.setText(df.getValueAt(selectedIndex, 3).toString());
+          DRE_feebox.setText(df.getValueAt(selectedIndex, 4).toString());
           Date date;
-          date = new SimpleDateFormat("yyyy-MM-dd").parse((String)df.getValueAt(selectedIndex, 4));  
+          date = new SimpleDateFormat("yyyy-MM-dd").parse((String)df.getValueAt(selectedIndex, 5));  
           DRE_datecal.setDate(date);
           Date due;
-          due = new SimpleDateFormat("yyyy-MM-dd").parse((String)df.getValueAt(selectedIndex, 5));
+          due = new SimpleDateFormat("yyyy-MM-dd").parse((String)df.getValueAt(selectedIndex, 6));
           DREdue_datecal.setDate(due);
          
           insertbtn.setEnabled(false);
@@ -449,7 +505,17 @@ public class DressRentForm extends javax.swing.JFrame {
     }//GEN-LAST:event_table1KeyReleased
 
     private void clearbtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearbtn1ActionPerformed
-       clear();
+                DREdres_idbox.setSelectedIndex(0);
+                DREcus_idbox.setSelectedIndex(0);
+                DREcus_namebox.setText("");
+                DRE_feebox.setText("");           
+                DREdres_idbox.requestFocus();
+                
+                autoID();
+                insertbtn.setEnabled(true);
+                jButton2.setEnabled(false);
+                jButton3.setEnabled(false);
+                
     }//GEN-LAST:event_clearbtn1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -470,29 +536,36 @@ public class DressRentForm extends javax.swing.JFrame {
        String date = Date_Format.format(DRE_datecal.getDate()); 
        SimpleDateFormat Date_Format1 = new SimpleDateFormat("yyyy-MM-dd");
        String due = Date_Format1.format(DREdue_datecal.getDate());
+       String Rent_id=DRErent_idbox.getText();
        
         try {
             //DREcus_id=?,DREcus_name=?,DRE_fee=?,DRE_date=?,DREdue_date=? 
-            String sql = "update dress_rent set DREcus_id=? , DRE_fee=? , DRE_date=? , DREdue_date=?  where DREdres_id=? and DREcus_name=?";
+            String sql = "update dress_rent set DREcus_id=?,DREcus_name=?, DREcus_id=? , DRE_fee=? , DRE_date=? , DREdue_date=?  where DREdres_RID=?";
             pst = conn.prepareStatement(sql);
            
-            pst.setString(2, cust_id);
-            pst.setString(1, cust_name);
-            pst.setString(3, fee);
-            pst.setString(4, date);
-            pst.setString(5, due);
-            pst.setString(6, dress_id);
-            pst.setString(7, fee);
-            
-            
+            pst.setString(3, cust_id);
+            pst.setString(2, cust_name);
+            pst.setString(4, fee);
+            pst.setString(5, date);
+            pst.setString(6, due);
+            pst.setString(1, dress_id);
+            pst.setString(7, Rent_id);
+                        
             pst.executeUpdate();
-            JOptionPane.showMessageDialog(null,"Data Insert Sucessfully!");
+            JOptionPane.showMessageDialog(null,"Data Updated Sucessfully!");
             tableload();
+            autoID();
+                DREdres_idbox.setSelectedIndex(0);
+                DREcus_idbox.setSelectedIndex(0);
+                DREcus_namebox.setText("");
+                DRE_feebox.setText("");
+               // DRErent_idbox.setText("");
+                DREdres_idbox.requestFocus();
+                
+                insertbtn.setEnabled(true);
+                jButton2.setEnabled(false);
+                jButton3.setEnabled(false);
             
-            DREcus_idbox.requestFocus();
-            fillcombo();
-            insertbtn.setEnabled(true);
-            conn.close();
               
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
@@ -502,33 +575,28 @@ public class DressRentForm extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-       String dress_id = DREdres_idbox.getSelectedItem().toString();
-       String cust_id = DREcus_idbox.getSelectedItem().toString();
-       String cust_name= DREcus_namebox.getText();
-       String fee = DRE_feebox.getText();
-       SimpleDateFormat Date_Format = new SimpleDateFormat("yyyy-MM-dd");
-       String date = Date_Format.format(DRE_datecal.getDate()); 
-       SimpleDateFormat Date_Format1 = new SimpleDateFormat("yyyy-MM-dd");
-       String due = Date_Format1.format(DREdue_datecal.getDate());
-       
+       String Rent_id=DRErent_idbox.getText();
         try {
-            String sql = "delete from dress_rent where DREdres_id=? and DREcus_id=? and DREcus_name=? and DRE_fee=? and DRE_date=? and DREdue_date=? ";
+            String sql = "delete from dress_rent where DREdres_RID=? ";
             pst = conn.prepareStatement(sql);
            
-            pst.setString(2, cust_id);
-            pst.setString(3, cust_name);
-            pst.setString(4, fee);
-            pst.setString(5, date);
-            pst.setString(6, due);
-            pst.setString(1, dress_id);
+            pst.setString(1, Rent_id);
+            
             
             pst.executeUpdate();
             JOptionPane.showMessageDialog(null,"Data delete Sucessfully!");
+            autoID();
             tableload();
-            
-            DREcus_idbox.requestFocus();
-            fillcombo();
-            insertbtn.setEnabled(true);
+                DREdres_idbox.setSelectedIndex(0);
+                DREcus_idbox.setSelectedIndex(0);
+                DREcus_namebox.setText("");
+                DRE_feebox.setText("");
+                //DRErent_idbox.setText("");
+                DREdres_idbox.requestFocus();
+                
+                insertbtn.setEnabled(true);
+                jButton2.setEnabled(false);
+                jButton3.setEnabled(false);
             conn.close();
               
         } catch (Exception e) {
@@ -559,7 +627,12 @@ public class DressRentForm extends javax.swing.JFrame {
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
         DREcus_namebox.setEditable(false);
+        DRErent_idbox.setEditable(false);
     }//GEN-LAST:event_formComponentShown
+
+    private void DREcus_nameboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DREcus_nameboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DREcus_nameboxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -603,6 +676,7 @@ public class DressRentForm extends javax.swing.JFrame {
     private javax.swing.JTextField DREcus_namebox;
     private javax.swing.JComboBox<String> DREdres_idbox;
     private com.toedter.calendar.JDateChooser DREdue_datecal;
+    private javax.swing.JTextField DRErent_idbox;
     private javax.swing.JButton clearbtn1;
     private javax.swing.JButton insertbtn;
     private javax.swing.JButton jButton1;
@@ -617,6 +691,7 @@ public class DressRentForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
